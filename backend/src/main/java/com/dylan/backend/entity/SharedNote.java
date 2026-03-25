@@ -23,6 +23,14 @@ public class SharedNote {
     private Permission permission;
 
     // ---------------------------------------------------------
+    // Constructor
+    public SharedNote(Note note, User user, Permission permission){
+        this.note = note;
+        this.user = user;
+        this.permission = permission;
+    }
+
+    // ---------------------------------------------------------
     // Getters and setters
 
     public long getId(){

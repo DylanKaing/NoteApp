@@ -3,6 +3,8 @@ package com.dylan.backend.entity;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+import com.dylan.backend.dto.NoteDTO;
+
 @Entity
 @Table(name="notes")
 public class Note {
@@ -44,6 +46,15 @@ public class Note {
     @PreUpdate
     protected void onUpdate(){
         updatedAt = LocalDateTime.now();
+    }
+
+    // ---------------------------------------------------------
+    // Constructors
+    public Note(NoteDTO noteDTO) {
+        this.name = noteDTO.getName();
+        this.content = noteDTO.getContent();
+        this.drawingData = noteDTO.getDrawingData();
+        this.pdfPath = noteDTO.getPdfPath();
     }
 
 

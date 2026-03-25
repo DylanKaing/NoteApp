@@ -10,5 +10,6 @@ public interface SharedNoteRepository extends JpaRepository<SharedNote, Long> {
     
     List<SharedNote> findByUserUserId(Long userId);
     List<SharedNote> findByNoteNoteId(Long noteId);
+    SharedNote findByNoteNoteIdAndUserUserId(Long noteId, Long userId);
 
 }

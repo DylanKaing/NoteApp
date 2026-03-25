@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 
 import org.springframework.cglib.core.Local;
 
+import com.dylan.backend.entity.Note;
+
 public class NoteDTO {
     private Long noteId;
     private String name;
@@ -14,6 +16,17 @@ public class NoteDTO {
     private String ownerUsername; // just the username, not the full User object
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+    public NoteDTO(Note note) {
+        this.noteId = note.getNoteId();
+        this.name = note.getName();
+        this.content = note.getContent();
+        this.drawingData = note.getDrawingData();
+        this.pdfPath = note.getPdfPath();
+        this.ownerUsername = note.getUser().getUsername();
+        this.createdAt = note.getCreatedAt();
+        this.updatedAt = note.getUpdatedAt();
+    }
 
     // Getters and setters
     public Long getNoteId(){
