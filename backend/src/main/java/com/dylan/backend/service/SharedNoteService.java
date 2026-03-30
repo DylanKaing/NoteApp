@@ -14,6 +14,21 @@ public class SharedNoteService {
     @Autowired
     private SharedNoteRepository sharedNoteRepository;
 
-    
+    public void revokeAccess(Long noteId, Long userId){
+        SharedNote sNote = sharedNoteRepository.findByNoteNoteIdAndUserUserId(noteId, userId);
+        if(sNote == null){
+            throw new RuntimeException("Shared note not found");
+        }
+        sharedNoteRepository.delete(sNote);
+    }
+
+    public void updatePermission(Long noteId, Long userId, Permission permission){
+        SharedNote sNote = sharedNoteRepository.findByNoteNoteIdAndUserUserId(noteId, userId);
+        if(sNote == null){
+            throw new RuntimeException("Shared note not found");
+        }
+        sNote.setPermission(permission);
+        sharedNoteRepository.save(sNote);
+    }
 
 }
