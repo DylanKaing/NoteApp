@@ -27,10 +27,13 @@ public class SecurityConfig {
             // Disable CSRF - not needed for REST APIs since we use JWT instead of cookies
             .csrf(csrf -> csrf.disable())
 
+            .headers(headers -> headers.frameOptions(frame -> frame.disable()))
+
             // Configure which endpoints are public and which need authentication
             .authorizeHttpRequests(auth -> auth
-                // Allow register and login without a token
+                // Allow register and login without a token as well as access to h2-console
                 .requestMatchers("/api/users/register", "/api/users/login").permitAll()
+                .requestMatchers("/h2-console/**").permitAll()
                 // Every other endpoint requires a valid JWT token
                 .anyRequest().authenticated()
             )
