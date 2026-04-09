@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { SharedNote } from './shared-note';
+import { SharedNoteService } from './shared-note-service';
 
-describe('SharedNote', () => {
-  let service: SharedNote;
+describe('SharedNoteService', () => {
+  let service: SharedNoteService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(SharedNote);
+    service = TestBed.inject(SharedNoteService);
   });
 
   it('should be created', () => {

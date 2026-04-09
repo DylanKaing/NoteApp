@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
-export class SharedNote {
+export class SharedNoteService {
   
   private apiUrl = 'http://localhost:8080/api/shared';
 
