@@ -1,10 +1,20 @@
-<p>login works!</p>
 <section>
 
-    
+    <h1>Login</h1>
+    <mat-form-field>
+        <mat-label>Username</mat-label>
+        <input matInput type = "text" [(ngModel)]="username"/>
+    </mat-form-field>
 
-    <button matButton="outlined">Login</button>
+    <mat-form-field>
+        <mat-label>Password</mat-label>
+        <input matInput type = "password" [(ngModel)]="password"/>
+    </mat-form-field>
     
-    <a routerLink = "register">Create Account</a>
+    <button matButton="outlined" (click)="login()">Login</button>
+    
+    <button matButton="outlined" routerLink="/register">Create Account</button>
+
+    <p *ngIf = "errorMessage">{{ errorMessage }}</p>
 
 </section>

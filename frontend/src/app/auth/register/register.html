@@ -1,1 +1,26 @@
-<p>register works!</p>
+<section>
+
+    <h1>Register</h1>
+
+    <mat-form-field>
+        <mat-label>Email</mat-label>
+        <input matInput type="email" [(ngModel)]="email"/>
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Username</mat-label>
+        <input matInput type = "text" [(ngModel)]="username"/>
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Password</mat-label>
+        <input matInput type = "password" [(ngModel)]="password"/>
+    </mat-form-field>
+    
+    <button matButton="outlined" (click)="register()">Register</button>
+    
+    <button matButton="outlined" routerLink="/login">Login</button>
+
+    <p *ngIf = "errorMessage">{{ errorMessage }}</p>
+
+</section>
