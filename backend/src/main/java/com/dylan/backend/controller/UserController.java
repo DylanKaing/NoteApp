@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import com.dylan.backend.dto.UserDTO;
 import com.dylan.backend.dto.RegisterDTO;
 import com.dylan.backend.dto.LoginDTO;
+import com.dylan.backend.dto.LoginResponseDTO;
 import com.dylan.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -21,7 +22,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginDTO loginDTO){
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginDTO loginDTO){
         return ResponseEntity.ok(userService.login(loginDTO));
     }
 

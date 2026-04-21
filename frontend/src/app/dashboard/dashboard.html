@@ -1,1 +1,16 @@
-<p>dashboard works!</p>
+
+<section>
+
+    <button matButton="filled" (click)="filter = 'all'" >All</button>
+    <button matButton="filled" (click)="filter = 'mine'">Mine</button>
+    <button matButton="filled" (click)="filter = 'shared'">Shared</button>
+
+    <button matButton="filled" routerLink="/note-editor/new">New Note</button>
+
+    <div *ngFor="let note of notes" class = "note-card">
+        <h3>{{ note.name }}</h3>
+        <button matButton (click)="openNote(note.noteId)">Open</button>
+        <button matButton (click)="deleteNote(note.noteId)">Delete</button>
+    </div>
+
+</section>

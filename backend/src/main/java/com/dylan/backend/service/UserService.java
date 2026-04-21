@@ -3,6 +3,7 @@ package com.dylan.backend.service;
 import com.dylan.backend.dto.RegisterDTO;
 import com.dylan.backend.dto.UserDTO;
 import com.dylan.backend.dto.LoginDTO;
+import com.dylan.backend.dto.LoginResponseDTO;
 import com.dylan.backend.entity.User;
 import com.dylan.backend.repository.UserRepository;
 import com.dylan.backend.security.JwtUtil;
@@ -37,7 +38,7 @@ public class UserService {
         return userDTO;
     }
 
-    public String login(LoginDTO loginDTO){
+    public LoginResponseDTO login(LoginDTO loginDTO){
 
         User user = userRepository.findByUsername(loginDTO.getUsername());
 
@@ -50,7 +51,7 @@ public class UserService {
             throw new RuntimeException("Invalid password");
         }
 
-        return jwtUtil.generateToken(user.getUsername());
+        return new LoginResponseDTO(jwtUtil.generateToken(user.getUsername()), user.getUserId());
     }
 
 }

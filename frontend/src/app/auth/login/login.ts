@@ -36,8 +36,9 @@ export class Login {
   //Login method after button is clicked
   login(){
     this.authService.login(this.username, this.password).subscribe({
-      next: (token) => {
-        this.authService.storeToken(token);
+      next: (response) => {
+        this.authService.storeToken(response.token);
+        localStorage.setItem('userId', String(response.userId));
         this.router.navigate(['/dashboard']);
       },
       error: (err) => {

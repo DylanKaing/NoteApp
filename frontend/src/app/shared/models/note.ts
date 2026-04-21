@@ -5,6 +5,7 @@ export interface Note {
     drawingData: string;
     pdfPath: string;
     ownerUsername: string;
+    ownerId: number;
     createdAt: string;
     updatedAt: string;
 }

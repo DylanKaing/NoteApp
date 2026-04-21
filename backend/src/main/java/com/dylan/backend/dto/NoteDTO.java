@@ -14,6 +14,7 @@ public class NoteDTO {
     private String drawingData;
     private String pdfPath;
     private String ownerUsername; // just the username, not the full User object
+    private Long ownerId;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -24,6 +25,7 @@ public class NoteDTO {
         this.drawingData = note.getDrawingData();
         this.pdfPath = note.getPdfPath();
         this.ownerUsername = note.getUser().getUsername();
+        this.ownerId = note.getUser().getUserId();
         this.createdAt = note.getCreatedAt();
         this.updatedAt = note.getUpdatedAt();
     }
@@ -75,6 +77,14 @@ public class NoteDTO {
 
     public void setOwnerUsername(String ownerUsername){
         this.ownerUsername = ownerUsername;
+    }
+
+    public Long getOwnerId(){
+        return ownerId;
+    }
+
+    public void setOwnerId(Long ownerId){
+        this.ownerId = ownerId;
     }
 
     public LocalDateTime getCreatedAt(){

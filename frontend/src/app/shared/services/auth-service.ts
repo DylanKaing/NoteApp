@@ -13,8 +13,8 @@ export class AuthService {
   // Inject HttpClient to make HTTP calls
   constructor(private http: HttpClient) {}
 
-  login(username: string, password: string): Observable<string> {
-    return this.http.post(this.apiUrl + '/login', { username, password}, { responseType: 'text'});
+  login(username: string, password: string): Observable<any> {
+    return this.http.post(this.apiUrl + '/login', { username, password});
   }
 
   register(username: string, email: string, password: string): Observable<any> {
