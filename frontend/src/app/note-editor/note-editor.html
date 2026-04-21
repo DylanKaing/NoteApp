@@ -14,7 +14,9 @@
         <button matButton="outlined" routerLink="/dashboard">Back</button>
     </div>
 
-    <div #editorContainer class="text-layer"></div>
-
-    <canvas id="drawingCanvas" class="draw-layer"></canvas>
+    
+    <div class = "layers-container">
+        <div #editorContainer class="text-layer"></div>
+        <canvas id="drawingCanvas" class="draw-layer" [class.active]="mode === 'draw'"></canvas>
+    </div>
 </div>

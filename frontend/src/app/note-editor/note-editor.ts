@@ -4,15 +4,21 @@ import { NoteService } from '../shared/services/note-service';
 import { Note } from '../shared/models/note';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { FormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
 import { Editor } from '@tiptap/core';
 import StarterKit from '@tiptap/starter-kit';
-import * as fabric from 'fabric';
+import { fabric } from 'fabric';
 
 @Component({
   selector: 'app-note-editor',
   imports: [
     CommonModule,
-    MatButtonModule
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    FormsModule
   ],
   templateUrl: './note-editor.html',
   styleUrl: './note-editor.css',
@@ -59,15 +65,34 @@ export class NoteEditor implements OnInit, AfterViewInit, OnDestroy {
     });
 
     this.canvas = new fabric.Canvas('drawingCanvas', {
-      isDrawingMode: false
+      width: 800,
+      height: 400,
+      isDrawingMode: true
     });
+    this.canvas.freeDrawingBrush = new fabric.PencilBrush(this.canvas);
+    console.log('Canvas element:', this.canvas.getElement());
+    console.log('Canvas width:', this.canvas.getWidth());
   }
 
+  // toggleMode(){
+  //   this.mode = this.mode === 'text' ? 'draw' : 'text';
+  //   if(this.canvas){
+  //     this.canvas.isDrawingMode = this.mode ==='draw';
+  //   }
+  //   console.log(this.mode);
+  // }
   toggleMode(){
-    this.mode = this.mode === 'text' ? 'draw' : 'text';
-    if(this.canvas){
-      this.canvas.isDrawingMode = this.mode ==='draw';
-    }
+      this.mode = this.mode === 'text' ? 'draw' : 'text';
+      const canvasContainer = document.querySelector('.canvas-container');
+      if(this.mode === 'draw'){
+          canvasContainer?.classList.add('active');
+      } else {
+          canvasContainer?.classList.remove('active');
+      }
+      if(this.canvas){
+          this.canvas.isDrawingMode = this.mode === 'draw';
+      }
+      console.log(this.mode);
   }
 
   save(){

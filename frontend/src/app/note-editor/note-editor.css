@@ -1,0 +1,101 @@
+/* 
+.editor-container {
+    position: relative;
+    padding: 16px;
+}
+
+.draw-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+
+.draw-layer.active {
+    pointer-events: all;
+} */
+
+
+
+/* .layers-container {
+    position: relative;
+    min-height: 400px;
+    border: 1px solid #ccc;
+    margin: 16px 0;
+}
+
+.text-layer {
+    padding: 16px;
+    min-height: 400px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1;
+}
+
+.draw-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 2;
+    background-color: rgba(255, 0, 0, 0.1);
+}
+
+.draw-layer.active {
+    pointer-events: all;
+    z-index: 3;
+    background-color: rgba(255, 0, 0, 0.1);
+}
+
+.canvas-container {
+    pointer-events: none;
+}
+
+.canvas-container.active {
+    pointer-events: all;
+}
+
+.layers-container .canvas-container {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+}  */
+
+.layers-container {
+    position: relative;
+    min-height: 400px;
+    border: 1px solid #ccc;
+    margin: 16px 0;
+}
+.text-layer {
+    padding: 16px;
+    min-height: 400px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1;
+}
+.draw-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 2;
+    background-color: rgba(255, 0, 0, 0.1);
+}
+.draw-layer.active {
+    pointer-events: all;
+    z-index: 3;
+}
+.canvas-container {
+    pointer-events: none !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+}
+.upper-canvas {
+    pointer-events: all !important;
+}

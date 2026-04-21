@@ -34,7 +34,7 @@
     "@tiptap/core": "^3.22.4",
     "@tiptap/pm": "^3.22.4",
     "@tiptap/starter-kit": "^3.22.4",
-    "fabric": "^7.3.1",
+    "fabric": "^5.3.0",
     "pdfjs-dist": "^5.6.205",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
@@ -44,6 +44,7 @@
     "@angular/cli": "^21.1.4",
     "@angular/compiler-cli": "^21.1.0",
     "@angular/material": "^21.2.5",
+    "@types/fabric": "^5.3.11",
     "jsdom": "^27.1.0",
     "typescript": "~5.9.2",
     "vitest": "^4.0.8"
