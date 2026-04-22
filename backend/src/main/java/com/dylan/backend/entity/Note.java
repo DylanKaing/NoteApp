@@ -22,9 +22,6 @@ public class Note {
     @Column(columnDefinition = "TEXT")
     private String content;
 
-    @Column(columnDefinition = "TEXT")
-    private String drawingData;
-
     private String pdfPath;
 
     @ManyToOne
@@ -53,7 +50,6 @@ public class Note {
     public Note(NoteDTO noteDTO) {
         this.name = noteDTO.getName();
         this.content = noteDTO.getContent();
-        this.drawingData = noteDTO.getDrawingData();
         this.pdfPath = noteDTO.getPdfPath();
     }
 
@@ -79,14 +75,6 @@ public class Note {
 
     public void setContent(String content){
         this.content = content;
-    }
-
-    public String getDrawingData(){
-        return drawingData;
-    } 
-
-    public void setDrawingData(String drawingData){
-        this.drawingData = drawingData;
     }
 
     public String getPdfPath(){

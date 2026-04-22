@@ -1,6 +1,5 @@
 package com.dylan.backend.service;
 
-import com.dylan.backend.dto.UserDTO;
 import com.dylan.backend.dto.NoteDTO;
 import com.dylan.backend.entity.User;
 import com.dylan.backend.entity.Note;
@@ -75,10 +74,9 @@ public class NoteService {
         Note note = noteRepository.findById(noteId).orElseThrow(() ->
             new RuntimeException("Note not found"));
 
-        // Update note's name, content, drawingData, and pdfPath
+        // Update note's name, content, and pdfPath
         note.setName(noteDto.getName());
         note.setContent(noteDto.getContent());
-        note.setDrawingData(noteDto.getDrawingData());
         note.setPdfPath(noteDto.getPdfPath());
 
         // Save updated note and then return it

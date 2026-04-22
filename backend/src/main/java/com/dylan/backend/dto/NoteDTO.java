@@ -11,7 +11,6 @@ public class NoteDTO {
     private Long noteId;
     private String name;
     private String content;
-    private String drawingData;
     private String pdfPath;
     private String ownerUsername; // just the username, not the full User object
     private Long ownerId;
@@ -22,7 +21,6 @@ public class NoteDTO {
         this.noteId = note.getNoteId();
         this.name = note.getName();
         this.content = note.getContent();
-        this.drawingData = note.getDrawingData();
         this.pdfPath = note.getPdfPath();
         this.ownerUsername = note.getUser().getUsername();
         this.ownerId = note.getUser().getUserId();
@@ -53,14 +51,6 @@ public class NoteDTO {
 
     public void setContent(String content){
         this.content = content;
-    }
-
-    public String getDrawingData(){
-        return drawingData;
-    }
-
-    public void setDrawingData(String drawingData){
-        this.drawingData = drawingData;
     }
 
     public String getPdfPath(){

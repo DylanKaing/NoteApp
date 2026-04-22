@@ -7,8 +7,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
-import { Editor } from '@tiptap/core';
-import StarterKit from '@tiptap/starter-kit';
 import { fabric } from 'fabric';
 
 @Component({
@@ -29,10 +27,7 @@ export class NoteEditor implements OnInit, AfterViewInit, OnDestroy {
   noteId: number | null = null;
   note: Note | null = null;
   mode = 'text';
-  editor: Editor | null = null;
   canvas: fabric.Canvas | null = null;
-
-  @ViewChild('editorContainer') editorContainer!: ElementRef;
 
   constructor(
     private route: ActivatedRoute,
@@ -47,58 +42,66 @@ export class NoteEditor implements OnInit, AfterViewInit, OnDestroy {
       this.noteService.getNoteById(this.noteId).subscribe(note =>{
         this.note = note;
 
-        this.editor?.commands.setContent(note.content || '');
+        if(note.content){
+          this.canvas?.loadFromJSON(JSON.parse(note.content), () => {
+            this.canvas?.renderAll();
+          })
+        }
+
       });
     }
   }
 
   ngOnDestroy(): void {
-    this.editor?.destroy();
     this.canvas?.dispose();
+    document.removeEventListener('keydown', this.handleKeyDown);
+  }
+
+  private handleKeyDown = (e: KeyboardEvent) => {
+    if(e.key==='Delete') {
+      this.deleteSelected();
+    }
   }
 
   ngAfterViewInit(): void {
-    this.editor = new Editor({
-      element: this.editorContainer.nativeElement,
-      extensions:[StarterKit],
-      content: this.note?.content || '',
-    });
-
     this.canvas = new fabric.Canvas('drawingCanvas', {
-      width: 800,
-      height: 400,
-      isDrawingMode: true
+        width: window.innerWidth,
+        height: 3000,
+        isDrawingMode: false
     });
     this.canvas.freeDrawingBrush = new fabric.PencilBrush(this.canvas);
-    console.log('Canvas element:', this.canvas.getElement());
-    console.log('Canvas width:', this.canvas.getWidth());
+
+    // click anywhere in text mode to create a text box
+    this.canvas.on('mouse:down', (e: any) => {
+        if(this.mode === 'text' && !e.target) {
+            const text = new fabric.IText('', {
+                left: e.pointer?.x,
+                top: e.pointer?.y,
+                fontSize: 16,
+                fontFamily: 'Arial'
+            });
+            this.canvas?.add(text);
+            this.canvas?.setActiveObject(text);
+            text.enterEditing();
+        }
+    });
+
+    this.canvas.on('object:added', (e: any) => {
+      if(e.target && e.target.type === 'path') {
+          e.target.perPixelTargetFind = true;
+          e.target.targetFindTolerance = 5;
+      }
+    });
+
+    document.addEventListener('keydown', this.handleKeyDown);
   }
 
-  toggleMode(){
+  toggleMode() {
     this.mode = this.mode === 'text' ? 'draw' : 'text';
-    if(this.canvas){
-      if(this.mode === 'draw'){
-        this.canvas.isDrawingMode = true;
-      } else{
-        this.canvas.isDrawingMode = false;
-      }
-      // this.canvas.isDrawingMode = this.mode ==='draw';
+    if(this.canvas) {
+        this.canvas.isDrawingMode = this.mode === 'draw';
     }
-    console.log(this.mode);
   }
-  // toggleMode(){
-  //     this.mode = this.mode === 'text' ? 'draw' : 'text';
-  //     const canvasContainer = document.querySelector('.canvas-container');
-  //     if(this.mode === 'draw'){
-  //         canvasContainer?.classList.add('active');
-  //     } else {
-  //         canvasContainer?.classList.remove('active');
-  //     }
-  //     if(this.canvas){
-  //         this.canvas.isDrawingMode = this.mode === 'draw';
-  //     }
-  //     console.log(this.mode);
-  // }
 
   selectMode(){
       this.mode = 'select';
@@ -108,25 +111,29 @@ export class NoteEditor implements OnInit, AfterViewInit, OnDestroy {
       }
   }
 
-  save(){
-    const content = this.editor?.getHTML();
+  deleteSelected() {
+    const activeObject = this.canvas?.getActiveObject();
+    if(activeObject) {
+        this.canvas?.remove(activeObject);
+        this.canvas?.discardActiveObject();
+        this.canvas?.renderAll();
+    }
+  }
+
+  save(){ // save entire canvas as JSON
+    const content = JSON.stringify(this.canvas?.toJSON());
 
     if(this.noteId){
       const updatedNote = {...this.note, content:content} as Note;      
       this.noteService.updateNote(this.noteId, updatedNote).subscribe({
-        next: () => {
-          console.log('Note Saved!');
-        },
-        error: (err) => {
-          console.error('Save failed', err);
-        }
+        next: () => console.log('Note Saved!'),
+        error: (err) => console.error('Save failed', err)
       });
     }
     else {
       const newNote = {
         name: this.noteName,
         content: content,
-        drawingData: '',
         pdfPath: ''
       } as Note;
       const userId = Number(localStorage.getItem('userId'));

@@ -7,23 +7,8 @@
     position: relative;
     width: 100%;
     height: 600px;
-    border: 1px solid #ccc;
-}
-
-.text-layer {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 2;
-    padding: 16px;
-    pointer-events: all;
-}
-
-.text-layer.inactive {
-    pointer-events: none;
-    z-index: -1;
+    border-top: 1px solid #ccc;
+    overflow: visible;
 }
 
 .canvas-container {
