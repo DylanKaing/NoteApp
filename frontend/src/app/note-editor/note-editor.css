@@ -9,6 +9,9 @@
     height: 600px;
     border-top: 1px solid #ccc;
     overflow: visible;
+    display:flex;
+    justify-content: center;
+    align-items: flex-start;
 }
 
 .canvas-container {
@@ -16,4 +19,11 @@
     top: 0 !important;
     left: 0 !important;
     z-index: 1 !important;
+    margin: 0 auto !important;
+    max-width: 100% !important;
+}
+
+.canvas-container canvas {
+    max-width: 100% !important;
+    height: auto !important;
 }

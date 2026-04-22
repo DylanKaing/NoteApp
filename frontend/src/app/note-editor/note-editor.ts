@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
-import { ActivatedRoute,Router } from '@angular/router';
+import { ActivatedRoute,Router, RouterLink } from '@angular/router';
 import { NoteService } from '../shared/services/note-service';
 import { Note } from '../shared/models/note';
 import { CommonModule } from '@angular/common';
@@ -9,6 +9,14 @@ import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { fabric } from 'fabric';
 
+import * as pdfjsLib from 'pdfjs-dist';
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
+    'pdfjs-dist/build/pdf.worker.mjs',
+    import.meta.url
+).toString();
+
+
 @Component({
   selector: 'app-note-editor',
   imports: [
@@ -16,7 +24,8 @@ import { fabric } from 'fabric';
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
-    FormsModule
+    FormsModule,
+    RouterLink
   ],
   templateUrl: './note-editor.html',
   styleUrl: './note-editor.css',
@@ -28,6 +37,7 @@ export class NoteEditor implements OnInit, AfterViewInit, OnDestroy {
   note: Note | null = null;
   mode = 'text';
   canvas: fabric.Canvas | null = null;
+  pdfBase64: string = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -41,6 +51,11 @@ export class NoteEditor implements OnInit, AfterViewInit, OnDestroy {
       this.noteId = Number(id);
       this.noteService.getNoteById(this.noteId).subscribe(note =>{
         this.note = note;
+
+        if(note.pdfPath) {
+          this.pdfBase64 = note.pdfPath;
+          this.renderPdf(note.pdfPath);
+        }
 
         if(note.content){
           this.canvas?.loadFromJSON(JSON.parse(note.content), () => {
@@ -65,7 +80,7 @@ export class NoteEditor implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.canvas = new fabric.Canvas('drawingCanvas', {
-        width: window.innerWidth,
+        width: 918,
         height: 3000,
         isDrawingMode: false
     });
@@ -120,6 +135,55 @@ export class NoteEditor implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  onPdfUpload(event: any) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+        const base64 = e.target.result;
+        this.pdfBase64 = base64;
+        this.renderPdf(base64);
+    };
+    reader.readAsDataURL(file);
+}
+
+  async renderPdf(base64: string) {
+    const loadingTask = pdfjsLib.getDocument(base64);
+    const pdf = await loadingTask.promise;
+    const page = await pdf.getPage(1);
+    
+    // increase scale for better quality
+    // const scale = window.devicePixelRatio*2;
+    // const scale = window.devicePixelRatio*1.2;
+    const scale = 1.5;
+    const viewport = page.getViewport({ scale });
+    
+    const tempCanvas = document.createElement('canvas');
+    tempCanvas.width = viewport.width;
+    tempCanvas.height = viewport.height;
+    const ctx = tempCanvas.getContext('2d')!;
+    
+    await page.render({
+        canvasContext: ctx,
+        viewport: viewport,
+        canvas: tempCanvas
+    }).promise;
+
+    const imgData = tempCanvas.toDataURL('image/png', 1.0);
+    
+    // resize fabric canvas to match PDF
+    this.canvas?.setWidth(viewport.width);
+    this.canvas?.setHeight(viewport.height);
+    this.canvas?.renderAll();
+    
+    this.canvas?.setBackgroundImage(imgData, () => {
+        this.canvas?.renderAll();
+    });
+
+    console.log('viewport width:', viewport.width);
+  }
+
   save(){ // save entire canvas as JSON
     const content = JSON.stringify(this.canvas?.toJSON());
 
@@ -134,7 +198,7 @@ export class NoteEditor implements OnInit, AfterViewInit, OnDestroy {
       const newNote = {
         name: this.noteName,
         content: content,
-        pdfPath: ''
+        pdfPath: this.pdfBase64
       } as Note;
       const userId = Number(localStorage.getItem('userId'));
       this.noteService.createNote(newNote, userId).subscribe({

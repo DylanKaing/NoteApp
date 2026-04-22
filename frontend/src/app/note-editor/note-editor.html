@@ -1,4 +1,4 @@
-<div *ngIf="!noteId">
+<div>
     <mat-form-field>
         <mat-label>Note Name</mat-label>
         <input matInput [(ngModel)] = "noteName" />
@@ -12,13 +12,16 @@
         <button matButton="outlined" (click)="toggleMode()">
             {{ mode === 'text' ? 'Switch to Draw' : 'Switch to Text' }}
         </button>
+        <button matButton="outlined" (click)="pdfInput.click()">Upload PDF</button>
+        <input #pdfInput type="file" accept=".pdf" style="display:none" (change)="onPdfUpload($event)" />
         <button matButton="outlined" routerLink="/dashboard">Back</button>
     </div>
 
+    <br>
     
     <div class = "layers-container">
 
         <canvas id="drawingCanvas"></canvas>
-        
+
     </div>
 </div>

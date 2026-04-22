@@ -22,6 +22,7 @@ public class Note {
     @Column(columnDefinition = "TEXT")
     private String content;
 
+    @Column(columnDefinition = "TEXT")
     private String pdfPath;
 
     @ManyToOne
@@ -47,6 +48,8 @@ public class Note {
 
     // ---------------------------------------------------------
     // Constructors
+    public Note() {}
+
     public Note(NoteDTO noteDTO) {
         this.name = noteDTO.getName();
         this.content = noteDTO.getContent();

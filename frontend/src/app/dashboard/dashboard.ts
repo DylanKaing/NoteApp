@@ -7,6 +7,7 @@ import { RouterLink } from '@angular/router';
 import { NoteService } from '../shared/services/note-service';
 import { Note } from '../shared/models/note';
 import { CommonModule } from '@angular/common';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-dashboard',
@@ -28,25 +29,36 @@ export class Dashboard implements OnInit{
     //services
   constructor(
     private noteService: NoteService, 
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ){}
 
 
   ngOnInit(): void {
-    const userId = Number(localStorage.getItem('userId'));
-    this.noteService.getNotesByUser(userId).subscribe(notes => {
-      this.notes = notes;
-    });
+      const userId = Number(localStorage.getItem('userId'));
+      
+      this.noteService.getNotesByUser(userId).subscribe({
+          next: (notes) => {
+              this.notes = [...notes];
+              this.cdr.detectChanges();
+          },
+          error: (err) => console.error('Failed to load notes', err)
+      });
 
-    this.noteService.getSharedNotes(userId).subscribe(sharedNotes=>{
-      this.notes = [...this.notes, ...sharedNotes];
-    });
+      this.noteService.getSharedNotes(userId).subscribe({
+          next: (sharedNotes) => {
+              this.notes = [...this.notes, ...sharedNotes];
+              this.cdr.detectChanges();
+          },
+          error: (err) => console.error('Failed to load shared notes', err)
+      });
   }
 
   deleteNote(noteId: number) {
     this.noteService.deleteNote(noteId).subscribe({
       next: () => {
         this.notes = this.notes.filter(note => note.noteId !== noteId);
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Delete failed', err);

@@ -17,6 +17,8 @@ public class NoteDTO {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
+    public NoteDTO(){}
+
     public NoteDTO(Note note) {
         this.noteId = note.getNoteId();
         this.name = note.getName();
