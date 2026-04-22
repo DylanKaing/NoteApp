@@ -74,25 +74,38 @@ export class NoteEditor implements OnInit, AfterViewInit, OnDestroy {
     console.log('Canvas width:', this.canvas.getWidth());
   }
 
-  // toggleMode(){
-  //   this.mode = this.mode === 'text' ? 'draw' : 'text';
-  //   if(this.canvas){
-  //     this.canvas.isDrawingMode = this.mode ==='draw';
-  //   }
-  //   console.log(this.mode);
-  // }
   toggleMode(){
-      this.mode = this.mode === 'text' ? 'draw' : 'text';
-      const canvasContainer = document.querySelector('.canvas-container');
+    this.mode = this.mode === 'text' ? 'draw' : 'text';
+    if(this.canvas){
       if(this.mode === 'draw'){
-          canvasContainer?.classList.add('active');
-      } else {
-          canvasContainer?.classList.remove('active');
+        this.canvas.isDrawingMode = true;
+      } else{
+        this.canvas.isDrawingMode = false;
       }
+      // this.canvas.isDrawingMode = this.mode ==='draw';
+    }
+    console.log(this.mode);
+  }
+  // toggleMode(){
+  //     this.mode = this.mode === 'text' ? 'draw' : 'text';
+  //     const canvasContainer = document.querySelector('.canvas-container');
+  //     if(this.mode === 'draw'){
+  //         canvasContainer?.classList.add('active');
+  //     } else {
+  //         canvasContainer?.classList.remove('active');
+  //     }
+  //     if(this.canvas){
+  //         this.canvas.isDrawingMode = this.mode === 'draw';
+  //     }
+  //     console.log(this.mode);
+  // }
+
+  selectMode(){
+      this.mode = 'select';
       if(this.canvas){
-          this.canvas.isDrawingMode = this.mode === 'draw';
+          this.canvas.isDrawingMode = false;
+          this.canvas.selection = true;
       }
-      console.log(this.mode);
   }
 
   save(){

@@ -8,6 +8,7 @@
     <!-- ToolBar -->
     <div class ="toolbar">
         <button matButton="filled" (click)="save()">Save</button>
+        <button matButton="outlined" (click)="selectMode()">Select</button>
         <button matButton="outlined" (click)="toggleMode()">
             {{ mode === 'text' ? 'Switch to Draw' : 'Switch to Text' }}
         </button>
@@ -16,7 +17,11 @@
 
     
     <div class = "layers-container">
-        <div #editorContainer class="text-layer"></div>
-        <canvas id="drawingCanvas" class="draw-layer" [class.active]="mode === 'draw'"></canvas>
+        <!-- <div #editorContainer class="text-layer"></div>
+        <canvas id="drawingCanvas" class="draw-layer" [class.active]="mode === 'draw'"></canvas> -->
+        <canvas id="drawingCanvas"></canvas>
+        
+        <!-- TipTap floats on top -->
+        <div #editorContainer class="text-layer" [class.inactive]="mode === 'draw' || mode === 'select'"></div>
     </div>
 </div>
