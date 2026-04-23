@@ -198,7 +198,7 @@ export class NoteEditor implements OnInit, AfterViewInit, OnDestroy {
     const content = JSON.stringify(this.canvas?.toJSON());
 
     if(this.noteId){
-      const updatedNote = {...this.note, content:content} as Note;      
+      const updatedNote = {...this.note, content:content, name: this.noteName, pdfPath: this.pdfBase64} as Note;      
       this.noteService.updateNote(this.noteId, updatedNote).subscribe({
         next: () => console.log('Note Saved!'),
         error: (err) => console.error('Save failed', err)
