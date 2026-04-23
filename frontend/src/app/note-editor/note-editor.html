@@ -14,6 +14,7 @@
         </button>
         <button matButton="outlined" (click)="pdfInput.click()">Upload PDF</button>
         <input #pdfInput type="file" accept=".pdf" style="display:none" (change)="onPdfUpload($event)" />
+        <button matButton="outlined" (click)="exportPdf()">Export as PDF</button>
         <button matButton="outlined" routerLink="/dashboard">Back</button>
     </div>
 

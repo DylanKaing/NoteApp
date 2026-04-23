@@ -8,8 +8,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { fabric } from 'fabric';
+import { ChangeDetectorRef } from '@angular/core';
 
 import * as pdfjsLib from 'pdfjs-dist';
+import { jsPDF } from 'jspdf';
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
     'pdfjs-dist/build/pdf.worker.mjs',
@@ -42,7 +44,8 @@ export class NoteEditor implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private noteService: NoteService
+    private noteService: NoteService,
+    private cdr: ChangeDetectorRef
   ){}
 
   ngOnInit(): void {
@@ -51,6 +54,10 @@ export class NoteEditor implements OnInit, AfterViewInit, OnDestroy {
       this.noteId = Number(id);
       this.noteService.getNoteById(this.noteId).subscribe(note =>{
         this.note = note;
+
+        if(note.name) {
+          this.noteName = note.name;
+        }
 
         if(note.pdfPath) {
           this.pdfBase64 = note.pdfPath;
@@ -63,8 +70,11 @@ export class NoteEditor implements OnInit, AfterViewInit, OnDestroy {
           })
         }
 
+        this.cdr.detectChanges();
+
       });
     }
+    
   }
 
   ngOnDestroy(): void {
@@ -212,5 +222,25 @@ export class NoteEditor implements OnInit, AfterViewInit, OnDestroy {
       });
     }
   }
+
+  exportPdf() {
+    const multiplier = 2; // export at 2x resolution
+    const imgData = this.canvas?.toDataURL({
+        multiplier: multiplier,
+        format: 'png',
+        quality: 1
+    });
+    if (!imgData) return;
+    
+    const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'px',
+        format: [this.canvas!.width!, this.canvas!.height!]
+    });
+    
+    pdf.addImage(imgData, 'PNG', 0, 0, this.canvas!.width!, this.canvas!.height!);
+    const fileName = this.note?.name || this.noteName || 'note';
+    pdf.save(`${fileName}.pdf`);
+}
 
 }
